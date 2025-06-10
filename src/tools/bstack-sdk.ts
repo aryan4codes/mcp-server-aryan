@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import {
@@ -46,8 +46,9 @@ export async function bootstrapProjectWithSDK({
   };
 }
 
-export default function addSDKTools(server: McpServer) {
-  server.tool(
+export default function addSDKTools(server: McpServer): Tool[] {
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "runTestsOnBrowserStack",
     "Use this tool to get instructions for running tests on BrowserStack.",
     {
@@ -102,5 +103,6 @@ export default function addSDKTools(server: McpServer) {
         };
       }
     },
-  );
+  ));
+  return tools;
 }

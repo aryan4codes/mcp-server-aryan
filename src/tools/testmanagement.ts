@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { trackMCP } from "../lib/instrumentation.js";
@@ -317,65 +317,67 @@ export async function createTestCasesFromFileTool(
 /**
  * Registers both project/folder and test-case tools.
  */
-export default function addTestManagementTools(server: McpServer) {
+export default function addTestManagementTools(server: McpServer): Tool[] {
   serverInstance = server;
-  server.tool(
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "createProjectOrFolder",
     "Create a project and/or folder in BrowserStack Test Management.",
     CreateProjFoldSchema.shape,
     createProjectOrFolderTool,
-  );
+  ));
 
-  server.tool(
+  tools.push(server.tool(
     "createTestCase",
     "Use this tool to create a test case in BrowserStack Test Management.",
     CreateTestCaseSchema.shape,
     createTestCaseTool,
-  );
+  ));
 
-  server.tool(
+  tools.push(server.tool(
     "listTestCases",
     "List test cases in a project with optional filters (status, priority, custom fields, etc.)",
     ListTestCasesSchema.shape,
     listTestCasesTool,
-  );
+  ));
 
-  server.tool(
+  tools.push(server.tool(
     "createTestRun",
     "Create a test run in BrowserStack Test Management.",
     CreateTestRunSchema.shape,
     createTestRunTool,
-  );
+  ));
 
-  server.tool(
+  tools.push(server.tool(
     "listTestRuns",
     "List test runs in a project with optional filters (date ranges, assignee, state, etc.)",
     ListTestRunsSchema.shape,
     listTestRunsTool,
-  );
-  server.tool(
+  ));
+  tools.push(server.tool(
     "updateTestRun",
     "Update a test run in BrowserStack Test Management.",
     UpdateTestRunSchema.shape,
     updateTestRunTool,
-  );
-  server.tool(
+  ));
+  tools.push(server.tool(
     "addTestResult",
     "Add a test result to a specific test run via BrowserStack Test Management API.",
     AddTestResultSchema.shape,
     addTestResultTool,
-  );
+  ));
 
-  server.tool(
+  tools.push(server.tool(
     "uploadProductRequirementFile",
     "Upload files such as PDRs or PDFs to BrowserStack Test Management and get file mapping ID back. Its Used for generating test cases from file.",
     UploadFileSchema.shape,
     uploadProductRequirementFileTool,
-  );
-  server.tool(
+  ));
+  tools.push(server.tool(
     "createTestCasesFromFile",
     "Create test cases from a file in BrowserStack Test Management.",
     CreateTestCasesFromFileSchema.shape,
     createTestCasesFromFileTool,
-  );
+  ));
+  return tools;
 }

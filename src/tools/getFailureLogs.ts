@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import logger from "../logger.js";
@@ -149,8 +149,9 @@ export async function getFailureLogs(args: {
 }
 
 // Register tool with the MCP server
-export default function registerGetFailureLogs(server: McpServer) {
-  server.tool(
+export default function addFailureLogsTools(server: McpServer): Tool[] {
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "getFailureLogs",
     "Fetch various types of logs from a BrowserStack session. Supports both automate and app-automate sessions.",
     {
@@ -203,5 +204,6 @@ export default function registerGetFailureLogs(server: McpServer) {
         };
       }
     },
-  );
+  ));
+  return tools;
 }

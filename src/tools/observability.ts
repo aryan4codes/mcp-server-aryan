@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { getLatestO11YBuildInfo } from "../lib/api.js";
@@ -41,8 +41,9 @@ export async function getFailuresInLastRun(
   };
 }
 
-export default function addObservabilityTools(server: McpServer) {
-  server.tool(
+export default function addObservabilityTools(server: McpServer): Tool[] {
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "getFailuresInLastRun",
     "Use this tool to debug failures in the last run of the test suite on BrowserStack. Use only when browserstack.yml file is present in the project root.",
     {
@@ -80,5 +81,6 @@ export default function addObservabilityTools(server: McpServer) {
         };
       }
     },
-  );
+  ));
+  return tools;
 }

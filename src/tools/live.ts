@@ -1,5 +1,5 @@
 // File: src/tools/live.ts
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import logger from "../logger.js";
 import { startBrowserSession } from "./live-utils/start-session.js";
@@ -98,8 +98,9 @@ async function runBrowserSession(rawArgs: any) {
   };
 }
 
-export default function addBrowserLiveTools(server: McpServer) {
-  server.tool(
+export default function addBrowserLiveTools(server: McpServer): Tool[] {
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "runBrowserLiveSession",
     "Launch a BrowserStack Live session (desktop or mobile).",
     LiveArgsShape,
@@ -126,5 +127,6 @@ export default function addBrowserLiveTools(server: McpServer) {
         };
       }
     },
-  );
+  ));
+  return tools;
 }

@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { fetchAutomationScreenshots } from "./automate-utils/fetch-screenshots.js";
@@ -53,8 +53,8 @@ export async function fetchAutomationScreenshotsTool(args: {
 }
 
 //Registers the fetchAutomationScreenshots tool with the MCP server
-export default function addAutomationTools(server: McpServer) {
-  server.tool(
+export default function addAutomationTools(server: McpServer): Tool[] {
+  const fetchScreenshotsTool = server.tool(
     "fetchAutomationScreenshots",
     "Fetch and process screenshots from a BrowserStack Automate session",
     {
@@ -91,4 +91,5 @@ export default function addAutomationTools(server: McpServer) {
       }
     },
   );
+  return [fetchScreenshotsTool];
 }

@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import fs from "fs";
@@ -63,8 +63,9 @@ export async function startAppLiveSession(args: {
   };
 }
 
-export default function addAppLiveTools(server: McpServer) {
-  server.tool(
+export default function addAppLiveTools(server: McpServer): Tool[] {
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "runAppLiveSession",
     "Use this tool when user wants to manually check their app on a particular mobile device using BrowserStack's cloud infrastructure. Can be used to debug crashes, slow performance, etc.",
     {
@@ -108,5 +109,6 @@ export default function addAppLiveTools(server: McpServer) {
         };
       }
     },
-  );
+  ));
+  return tools;
 }

@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { getSelfHealSelectors } from "./selfheal-utils/selfheal.js";
@@ -27,8 +27,9 @@ export async function fetchSelfHealSelectorTool(args: {
 }
 
 // Registers the fetchSelfHealSelector tool with the MCP server
-export default function addSelfHealTools(server: McpServer) {
-  server.tool(
+export default function addSelfHealTools(server: McpServer): Tool[] {
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "fetchSelfHealedSelectors",
     "Retrieves AI-generated, self-healed selectors for a BrowserStack Automate session to resolve flaky tests caused by dynamic DOM changes.",
     {
@@ -50,5 +51,6 @@ export default function addSelfHealTools(server: McpServer) {
         };
       }
     },
-  );
+  ));
+  return tools;
 }

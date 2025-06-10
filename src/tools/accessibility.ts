@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { AccessibilityScanner } from "./accessiblity-utils/scanner.js";
@@ -69,8 +69,9 @@ async function runAccessibilityScan(
   };
 }
 
-export default function addAccessibilityTools(server: McpServer) {
-  server.tool(
+export default function addAccessibilityTools(server: McpServer): Tool[] {
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "startAccessibilityScan",
     "Start an accessibility scan via BrowserStack and retrieve a local CSV report path.",
     {
@@ -101,5 +102,6 @@ export default function addAccessibilityTools(server: McpServer) {
         };
       }
     },
-  );
+  ));
+  return tools;
 }

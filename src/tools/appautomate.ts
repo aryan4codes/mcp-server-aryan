@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer, Tool } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import logger from "../logger.js";
@@ -139,8 +139,9 @@ async function takeAppScreenshot(args: {
 /**
  * Registers the `takeAppScreenshot` tool with the MCP server.
  */
-export default function addAppAutomationTools(server: McpServer) {
-  server.tool(
+export default function addAppAutomationTools(server: McpServer): Tool[] {
+  const tools: Tool[] = [];
+  tools.push(server.tool(
     "takeAppScreenshot",
     "Use this tool to take a screenshot of an app running on a BrowserStack device. This is useful for visual testing and debugging.",
     {
@@ -181,5 +182,6 @@ export default function addAppAutomationTools(server: McpServer) {
         };
       }
     },
-  );
+  ));
+  return tools;
 }
